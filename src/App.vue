@@ -1,5 +1,5 @@
-<script setup>
-import PokemonVIew from "./feature/view/PokemonVIew.vue";
+<script setup lang="ts">
+import PokemonVIew from "./feature/home/view/PokemonVIew.vue";
 </script>
 
 <template>
