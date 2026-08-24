@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { usePokemonViewModel } from './usePokemonViewModel'
+import { createPinia, setActivePinia, storeToRefs } from 'pinia'
+import { usePokemonStore } from './usePokemonStore'
 import api from '../../../core/api/api'
 
 vi.mock('../../../core/api/api', () => ({
@@ -64,17 +65,19 @@ const mappedIvysaur = {
   height: 10,
 }
 
-describe('usePokemonViewModel', () => {
+describe('usePokemonStore', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    setActivePinia(createPinia())
   })
 
   describe('fetchAPokemon', () => {
     it('sets pokemon on success', async () => {
       mockedGet.mockResolvedValueOnce({ data: rawCharmander })
 
-      const { pokemon, loading, error, fetchAPokemon } = usePokemonViewModel()
-      const promise = fetchAPokemon('charmander')
+      const store = usePokemonStore()
+      const { pokemon, loading, error } = storeToRefs(store)
+      const promise = store.fetchAPokemon('charmander')
 
       expect(loading.value).toBe(true)
 
@@ -88,8 +91,9 @@ describe('usePokemonViewModel', () => {
     it('sets error on failure', async () => {
       mockedGet.mockRejectedValueOnce(new Error('Network Error'))
 
-      const { pokemon, loading, error, fetchAPokemon } = usePokemonViewModel()
-      await fetchAPokemon('charmander')
+      const store = usePokemonStore()
+      const { pokemon, loading, error } = storeToRefs(store)
+      await store.fetchAPokemon('charmander')
 
       expect(pokemon.value).toBe(null)
       expect(loading.value).toBe(false)
@@ -104,8 +108,9 @@ describe('usePokemonViewModel', () => {
         .mockResolvedValueOnce({ data: rawBulbasaur })
         .mockResolvedValueOnce({ data: rawIvysaur })
 
-      const { pokemonList, loading, error, fetchAllPokemon } = usePokemonViewModel()
-      await fetchAllPokemon()
+      const store = usePokemonStore()
+      const { pokemonList, loading, error } = storeToRefs(store)
+      await store.fetchAllPokemon()
 
       expect(pokemonList.value).toEqual([mappedBulbasaur, mappedIvysaur])
       expect(loading.value).toBe(false)
@@ -115,8 +120,9 @@ describe('usePokemonViewModel', () => {
     it('sets error when the list call fails', async () => {
       mockedGet.mockRejectedValueOnce(new Error('Network Error'))
 
-      const { pokemonList, loading, error, fetchAllPokemon } = usePokemonViewModel()
-      await fetchAllPokemon()
+      const store = usePokemonStore()
+      const { pokemonList, loading, error } = storeToRefs(store)
+      await store.fetchAllPokemon()
 
       expect(pokemonList.value).toEqual([])
       expect(loading.value).toBe(false)
@@ -129,8 +135,9 @@ describe('usePokemonViewModel', () => {
         .mockRejectedValueOnce(new Error('Not Found'))
         .mockResolvedValueOnce({ data: rawIvysaur })
 
-      const { pokemonList, loading, error, fetchAllPokemon } = usePokemonViewModel()
-      await fetchAllPokemon()
+      const store = usePokemonStore()
+      const { pokemonList, loading, error } = storeToRefs(store)
+      await store.fetchAllPokemon()
 
       expect(pokemonList.value).toEqual([mappedIvysaur])
       expect(loading.value).toBe(false)
