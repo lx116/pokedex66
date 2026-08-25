@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { createPinia, setActivePinia, storeToRefs } from 'pinia'
 import { usePokemonStore } from './usePokemonStore'
 import api from '../../../core/api/api'
@@ -102,6 +102,14 @@ describe('usePokemonStore', () => {
   })
 
   describe('fetchAllPokemon', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
     it('sets pokemonList with mapped detail on success', async () => {
       mockedGet
         .mockResolvedValueOnce({ data: { results: [{ name: 'bulbasaur' }, { name: 'ivysaur' }] } })
@@ -110,7 +118,9 @@ describe('usePokemonStore', () => {
 
       const store = usePokemonStore()
       const { pokemonList, loading, error } = storeToRefs(store)
-      await store.fetchAllPokemon()
+      const promise = store.fetchAllPokemon()
+      await vi.runAllTimersAsync()
+      await promise
 
       expect(pokemonList.value).toEqual([mappedBulbasaur, mappedIvysaur])
       expect(loading.value).toBe(false)
@@ -122,7 +132,9 @@ describe('usePokemonStore', () => {
 
       const store = usePokemonStore()
       const { pokemonList, loading, error } = storeToRefs(store)
-      await store.fetchAllPokemon()
+      const promise = store.fetchAllPokemon()
+      await vi.runAllTimersAsync()
+      await promise
 
       expect(pokemonList.value).toEqual([])
       expect(loading.value).toBe(false)
@@ -137,7 +149,9 @@ describe('usePokemonStore', () => {
 
       const store = usePokemonStore()
       const { pokemonList, loading, error } = storeToRefs(store)
-      await store.fetchAllPokemon()
+      const promise = store.fetchAllPokemon()
+      await vi.runAllTimersAsync()
+      await promise
 
       expect(pokemonList.value).toEqual([mappedIvysaur])
       expect(loading.value).toBe(false)

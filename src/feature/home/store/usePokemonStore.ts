@@ -1,9 +1,9 @@
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
 import api from "../../../core/api/api";
-import {POKEMON_ENDPOINTS} from "../../../core/api/ApiEndpoints";
-import {Pokemon} from "../../../core/models/pokemonModel";
-import {createPokemon} from "../../../core/api/dto/pokemonDto";
+import {POKEMON_ENDPOINTS} from "@/core/api/ApiEndpoints";
+import {Pokemon} from "@/core/models/pokemonModel";
+import {createPokemon} from "@/core/api/dto/pokemonDto";
 
 export const usePokemonStore = defineStore('pokemon', () => {
     const pokemon = ref<Pokemon | null>(null);
@@ -43,6 +43,8 @@ export const usePokemonStore = defineStore('pokemon', () => {
         loading.value = true;
         error.value = null;
 
+        const minimumLoadingTime = new Promise(resolve => setTimeout(resolve, 1500))
+
         try {
             const listResponse = await api.get(POKEMON_ENDPOINTS.list)
             const names = listResponse.data.results
@@ -62,6 +64,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
         } catch (caughtError) {
             error.value = caughtError instanceof Error ? caughtError.message : String(caughtError);
         } finally {
+            await minimumLoadingTime
             loading.value = false;
         }
     }

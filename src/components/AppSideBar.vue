@@ -10,9 +10,9 @@ import pokedexIcon from '../assets/pokedex_icon.png'
 
 const navigation = [
   { name: 'Pokedex', icon: HomeIcon, href: '/' },
-  { name: 'Regiones', icon: GlobeAltIcon, href: '/search' },
-  { name: 'Favoritos', icon: HeartIcon, href: '/profile' },
-  { name: 'Perfil', icon: UserIcon, href: '/settings' }
+  { name: 'Regiones', icon: GlobeAltIcon, href: '/regions' },
+  { name: 'Favoritos', icon: HeartIcon, href: '/favorites' },
+  { name: 'Perfil', icon: UserIcon, href: '/profile' },
 ]
 </script>
 
