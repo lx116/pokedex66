@@ -2,18 +2,22 @@
 
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import { AdjustmentsHorizontalIcon } from "@heroicons/vue/24/outline";
 import { usePokemonStore } from "../store/usePokemonStore";
 import SearchPokemon from "./components/SearchPokemon.vue";
+import TypeFilterChips from "./components/TypeFilterChips.vue";
+import TypeFilterModal from "./components/TypeFilterModal.vue";
 import PokemonList from "./components/PokemonList.vue";
 import PokeballLoader from "@/components/PokeballLoading.vue";
 import ErrorMessage from "./components/ErrorMessage.vue";
 
 const store = usePokemonStore()
-const { loading, error } = storeToRefs(store)
+const { loading, error, selectedTypes } = storeToRefs(store)
 const { fetchAllPokemon } = store
 
 const showContent = ref(false)
 const showErrorPage = ref(false)
+const filterModalOpen = ref(false)
 
 onMounted(() => {
   fetchAllPokemon()
@@ -44,7 +48,28 @@ function retry() {
 
   <Transition v-else name="reveal">
     <div v-if="showContent">
-      <SearchPokemon/>
+      <SearchPokemon>
+        <template #actions>
+          <button
+              type="button"
+              aria-label="Filtros"
+              class="md:hidden relative flex h-12 w-13 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-transparent text-gray-500 transition hover:border-gray-400 hover:text-gray-700 active:scale-95"
+              @click="filterModalOpen = true"
+          >
+            <AdjustmentsHorizontalIcon class="h-5 w-5" />
+            <span
+                v-if="selectedTypes.length"
+                class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white"
+            >
+              {{ selectedTypes.length }}
+            </span>
+          </button>
+        </template>
+      </SearchPokemon>
+
+      <TypeFilterChips/>
+      <TypeFilterModal :open="filterModalOpen" @close="filterModalOpen = false" />
+
       <PokemonList/>
     </div>
   </Transition>

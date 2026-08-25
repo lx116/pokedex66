@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from 'vue'
 
-type LoaderState = 'idle' | 'loading' | 'success' | 'error'
+type LoaderState = 'idle' | 'loading' | 'success' | 'error' | 'notFound'
 
 const props = defineProps({
   loading: {
@@ -12,12 +12,18 @@ const props = defineProps({
   error: {
     type: Boolean,
     default: false
+  },
+
+  notFound: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emit = defineEmits<{
   complete: []
   errorComplete: []
+  notFoundComplete: []
 }>()
 
 const state = ref<LoaderState>('idle')
@@ -53,9 +59,20 @@ function finishError() {
   }, 1400)
 }
 
+function finishNotFound() {
+  clearAnimationTimer()
+
+  state.value = 'notFound'
+
+  animationTimer = setTimeout(() => {
+    state.value = 'idle'
+    emit('notFoundComplete')
+  }, 1400)
+}
+
 watch(
-    () => [props.loading, props.error] as const,
-    ([loading, error], oldValue) => {
+    () => [props.loading, props.error, props.notFound] as const,
+    ([loading, error, notFound], oldValue) => {
       const previousLoading = oldValue?.[0] ?? false
 
       clearAnimationTimer()
@@ -74,7 +91,9 @@ watch(
        * de haber estado cargando.
        */
       if (previousLoading && !loading) {
-        if (error) {
+        if (notFound) {
+          finishNotFound()
+        } else if (error) {
           finishError()
         } else {
           finishSuccess()
@@ -101,7 +120,8 @@ onBeforeUnmount(() => {
         :class="{
         loading: state === 'loading',
         success: state === 'success',
-        error: state === 'error'
+        error: state === 'error',
+        'not-found': state === 'notFound'
       }"
     >
       <img
@@ -128,6 +148,12 @@ onBeforeUnmount(() => {
 
       <span class="error-bolt error-bolt-1">ϟ</span>
       <span class="error-bolt error-bolt-2">ϟ</span>
+
+      <!-- Not found question marks -->
+
+      <span class="question-mark question-mark-1">?</span>
+      <span class="question-mark question-mark-2">?</span>
+      <span class="question-mark question-mark-3">?</span>
     </div>
 
     <div
@@ -135,7 +161,8 @@ onBeforeUnmount(() => {
         :class="{
         'shadow-loading': state === 'loading',
         'shadow-success': state === 'success',
-        'shadow-error': state === 'error'
+        'shadow-error': state === 'error',
+        'shadow-not-found': state === 'notFound'
       }"
     />
   </div>
@@ -624,6 +651,116 @@ onBeforeUnmount(() => {
 
 
 /* =========================================================
+   Not found
+   ========================================================= */
+
+.not-found .pokeball {
+  transform-origin: center bottom;
+
+  animation:
+      confusedWobble 1.2s
+      ease-in-out
+      forwards;
+}
+
+@keyframes confusedWobble {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-9deg);
+  }
+
+  40% {
+    transform: rotate(7deg);
+  }
+
+  60% {
+    transform: rotate(-5deg);
+  }
+
+  80% {
+    transform: rotate(3deg);
+  }
+}
+
+.question-mark {
+  position: absolute;
+
+  opacity: 0;
+
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+
+  color: #64748B;
+
+  pointer-events: none;
+}
+
+.not-found .question-mark {
+  animation:
+      questionPop .9s
+      ease-out
+      forwards;
+}
+
+.question-mark-1 {
+  top: -55px;
+  left: 0;
+
+  animation-delay: .1s !important;
+}
+
+.question-mark-2 {
+  top: -75px;
+  right: -8px;
+
+  animation-delay: .3s !important;
+}
+
+.question-mark-3 {
+  top: -35px;
+  right: -55px;
+
+  animation-delay: .5s !important;
+}
+
+@keyframes questionPop {
+
+  0% {
+    opacity: 0;
+
+    transform:
+        translateY(10px)
+        scale(.4)
+        rotate(-10deg);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+        translateY(-10px)
+        scale(1.1)
+        rotate(6deg);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+        translateY(-25px)
+        scale(.85)
+        rotate(0deg);
+  }
+}
+
+
+/* =========================================================
    Shadow
    ========================================================= */
 
@@ -730,6 +867,23 @@ onBeforeUnmount(() => {
         scaleX(.85);
 
     opacity: .55;
+  }
+}
+
+
+/* Not found shadow */
+
+.shadow-not-found {
+  animation:
+      notFoundShadow 1.2s ease-in-out forwards;
+}
+
+@keyframes notFoundShadow {
+
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
   }
 }
 
