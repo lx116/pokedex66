@@ -30,7 +30,7 @@ function retry() {
 </script>
 
 <template>
-<div class="p-6">
+<div>
   <div v-if="!showContent && !showErrorPage" class="min-h-screen flex items-center justify-center">
     <PokeballLoader
         :loading="loading"
@@ -48,26 +48,29 @@ function retry() {
 
   <Transition v-else name="reveal">
     <div v-if="showContent">
-      <SearchPokemon>
-        <template #actions>
-          <button
-              type="button"
-              aria-label="Filtros"
-              class="md:hidden relative flex h-12 w-13 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-transparent text-gray-500 transition hover:border-gray-400 hover:text-gray-700 active:scale-95"
-              @click="filterModalOpen = true"
-          >
-            <AdjustmentsHorizontalIcon class="h-5 w-5" />
-            <span
-                v-if="selectedTypes.length"
-                class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white"
+      <div class="sticky top-0 z-20 bg-gray-50 pb-2">
+        <SearchPokemon>
+          <template #actions>
+            <button
+                type="button"
+                aria-label="Filtros"
+                class="md:hidden relative flex h-12 w-13 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-transparent text-gray-500 transition hover:border-gray-400 hover:text-gray-700 active:scale-95"
+                @click="filterModalOpen = true"
             >
-              {{ selectedTypes.length }}
-            </span>
-          </button>
-        </template>
-      </SearchPokemon>
+              <AdjustmentsHorizontalIcon class="h-5 w-5" />
+              <span
+                  v-if="selectedTypes.length"
+                  class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white"
+              >
+                {{ selectedTypes.length }}
+              </span>
+            </button>
+          </template>
+        </SearchPokemon>
 
-      <TypeFilterChips/>
+        <TypeFilterChips/>
+      </div>
+
       <TypeFilterModal :open="filterModalOpen" @close="filterModalOpen = false" />
 
       <PokemonList/>

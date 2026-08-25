@@ -83,34 +83,16 @@ watch(pokemonName, (value) => {
       <button
           type="submit"
           aria-label="Buscar Pokémon"
-          class="
-            flex
-            h-12
-            w-13
-            shrink-0
-            items-center
-            justify-center
-            rounded-full
-            border
-            border-gray-300
-            bg-transparent
-            text-gray-500
-            transition
-            hover:border-gray-400
-            hover:text-gray-700
-            active:scale-95
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-500/20
-            disabled:cursor-not-allowed
-            disabled:opacity-40
-          "
+          :class="[
+            pokemonName.trim() ? 'flex' : 'hidden md:flex',
+            'h-12 w-13 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-transparent text-gray-500 transition hover:border-gray-400 hover:text-gray-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-40',
+          ]"
           :disabled="!pokemonName.trim()"
       >
         <MagnifyingGlassIcon class="h-5 w-5" />
       </button>
 
-      <slot name="actions" />
+      <slot v-if="!pokemonName.trim()" name="actions" />
 
     </form>
 
