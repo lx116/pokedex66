@@ -1,0 +1,130 @@
+{
+  "types": [
+    {
+      "bug": {
+        "icon": "bug.svg",
+        "color": "#43A047",
+        "spanish_name": "Bicho"
+      }
+    },
+    {
+      "dragon": {
+        "icon": "dragon.svg",
+        "color": "#00ACC1",
+        "spanish_name": "Dragón"
+      }
+    },
+    {
+      "ground": {
+        "icon": "earth.svg",
+        "color": "#FFB300",
+        "spanish_name": "Tierra"
+      }
+    },
+    {
+      "fairy": {
+        "icon": "fairy.svg",
+        "color": "#E91E63",
+        "spanish_name": "Hada"
+      }
+    },
+    {
+      "fighting": {
+        "icon": "fight.svg",
+        "color": "#E53935",
+        "spanish_name": "Lucha"
+      }
+    },
+    {
+      "fire": {
+        "icon": "fire.svg",
+        "color": "#FF9800",
+        "spanish_name": "Fuego"
+      }
+    },
+    {
+      "flying": {
+        "icon": "fly.svg",
+        "color": "#00BCD4",
+        "spanish_name": "Volador"
+      }
+    },
+    {
+      "ghost": {
+        "icon": "ghost.svg",
+        "color": "#8E24AA",
+        "spanish_name": "Fantasma"
+      }
+    },
+    {
+      "ice": {
+        "icon": "ice.svg",
+        "color": "#3D8BFF",
+        "spanish_name": "Hielo"
+      }
+    },
+    {
+      "grass": {
+        "icon": "leaf.svg",
+        "color": "#8BC34A",
+        "spanish_name": "Planta"
+      }
+    },
+    {
+      "steel": {
+        "icon": "metal.svg",
+        "color": "#546E7A",
+        "spanish_name": "Acero"
+      }
+    },
+    {
+      "normal": {
+        "icon": "normal.svg",
+        "color": "#546E7A",
+        "spanish_name": "Normal"
+      }
+    },
+    {
+      "poison": {
+        "icon": "poison.svg",
+        "color": "#9C27B0",
+        "spanish_name": "Veneno"
+      }
+    },
+    {
+      "psychic": {
+        "icon": "psy.svg",
+        "color": "#673AB7",
+        "spanish_name": "Psíquico"
+      }
+    },
+    {
+      "rock": {
+        "icon": "rock.svg",
+        "color": "#795548",
+        "spanish_name": "Roca"
+      }
+    },
+    {
+      "dark": {
+        "icon": "sinnester.svg",
+        "color": "#546E7A",
+        "spanish_name": "Siniestro"
+      }
+    },
+    {
+      "electric": {
+        "icon": "thunder.svg",
+        "color": "#FDD835",
+        "spanish_name": "Eléctrico"
+      }
+    },
+    {
+      "water": {
+        "icon": "water.svg",
+        "color": "#2196F3",
+        "spanish_name": "Agua"
+      }
+    }
+  ]
+}
