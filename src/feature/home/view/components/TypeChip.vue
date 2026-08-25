@@ -4,6 +4,8 @@ import type { PokemonTypeMeta } from "@/core/models/typeMeta";
 const props = defineProps<{
   type: PokemonTypeMeta;
   selected: boolean;
+  compact?: boolean;
+  forceWhiteText?: boolean;
 }>()
 
 defineEmits<{
@@ -17,15 +19,21 @@ function isLightColor(hex: string): boolean {
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
   return luminance > 0.6
 }
+
+function textColor(): string {
+  if (props.forceWhiteText) return '#fff'
+  return isLightColor(props.type.color) ? '#1a1a1a' : '#fff'
+}
 </script>
 
 <template>
   <button
       type="button"
       class="type-chip"
+      :class="{ compact }"
       :style="selected ? {
         backgroundColor: type.color,
-        color: isLightColor(type.color) ? '#1a1a1a' : '#fff',
+        color: textColor(),
       } : {}"
       @click="$emit('toggle')"
   >
@@ -36,7 +44,7 @@ function isLightColor(hex: string): boolean {
           :class="{ 'icon-muted': !selected }"
       />
     </span>
-    <span>{{ type.spanishName }}</span>
+    <span :class="{ 'compact-label': compact }">{{ type.spanishName }}</span>
   </button>
 </template>
 
@@ -87,6 +95,30 @@ function isLightColor(hex: string): boolean {
 .icon-muted {
   filter: grayscale(1);
   opacity: .45;
+}
+
+.type-chip.compact {
+  padding: 2px 5px;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.type-chip.compact .icon-badge {
+  width: 15px;
+  height: 15px;
+}
+
+.type-chip.compact .icon-badge img {
+  width: 9px;
+  height: 9px;
+}
+
+.compact-label {
+  display: inline-block;
+  max-width: 52px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 </style>
