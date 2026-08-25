@@ -5,21 +5,27 @@ const props = withDefaults(defineProps<{
   iconUrl: string;
   width?: number;
   height?: number;
+  maskSize?: string;
+  position?: "corner" | "center";
 }>(), {
   width: 126,
   height: 102,
+  maskSize: "100px 96px",
+  position: "corner",
 });
 
 const styles = computed<CSSProperties & Record<`--${string}`, string>>(() => ({
   width: `${props.width}px`,
   height: `${props.height}px`,
   "--icon-url": `url("${props.iconUrl}")`,
+  "--mask-size": props.maskSize,
 }));
 </script>
 
 <template>
   <div
       class="type-icon-backdrop"
+      :class="`type-icon-backdrop--${position}`"
       :style="styles"
   />
 </template>
@@ -27,8 +33,6 @@ const styles = computed<CSSProperties & Record<`--${string}`, string>>(() => ({
 <style scoped>
 .type-icon-backdrop {
   position: absolute;
-  top: 0;
-  right: 0;
 
   pointer-events: none;
 
@@ -50,6 +54,17 @@ const styles = computed<CSSProperties & Record<`--${string}`, string>>(() => ({
   mask-position: center;
 
   -webkit-mask-size: 108px 108px;
-  mask-size: 100px 96px;
+  mask-size: var(--mask-size);
+}
+
+.type-icon-backdrop--corner {
+  top: 0;
+  right: 0;
+}
+
+.type-icon-backdrop--center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

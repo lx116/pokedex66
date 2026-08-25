@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 import { Pokemon } from "@/core/models/pokemonModel";
 import { POKEMON_TYPES, type PokemonTypeMeta } from "@/core/models/typeMeta";
+import { hexToRgba } from "@/core/utils/color";
 import TypeChip from "./TypeChip.vue";
 import TypeIconBackdrop from "./TypeIconBackdrop.vue";
 
 const props = defineProps<{
   pokemon: Pokemon
 }>()
+
+const router = useRouter();
+
+function goToDetail() {
+  router.push({ name: 'pokemon-detail', params: { name: props.pokemon.name } })
+}
 
 const typeMetas = computed<PokemonTypeMeta[]>(() =>
     props.pokemon.types
@@ -18,13 +26,6 @@ const typeMetas = computed<PokemonTypeMeta[]>(() =>
 const primaryColor = computed(() => typeMetas.value[0]?.color ?? '#9E9E9E')
 
 const paddedId = computed(() => String(props.pokemon.id).padStart(3, '0'))
-
-function hexToRgba(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`
-}
 </script>
 
 <template>
@@ -39,8 +40,10 @@ function hexToRgba(hex: string, alpha: number): string {
     items-center
     justify-between
     overflow-hidden
+    cursor-pointer
   "
       :style="{ backgroundColor: hexToRgba(primaryColor, 0.42) }"
+      @click="goToDetail"
   >
     <!-- Información -->
     <div class="flex flex-col text-left min-w-0 pr-3 gap-1">

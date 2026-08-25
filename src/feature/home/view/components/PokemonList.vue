@@ -19,12 +19,7 @@ const {
 } = storeToRefs(store)
 const { loadMore, fetchAllPokemon } = store
 
-/*
- * Este componente solo se monta después de que la carga inicial
- * (dueña de HomeView) ya resolvió, así que arranca revelado. Cualquier
- * carga posterior (filtro, búsqueda) vuelve a mostrar el pokeball
- * centrado antes de revelar el resultado nuevo.
- */
+
 const revealed = ref(true)
 const showErrorPage = ref(false)
 const showNotFoundPage = ref(false)
@@ -46,10 +41,6 @@ const sentinel = ref<HTMLElement | null>(null)
 
 const observer = new IntersectionObserver(
     (entries) => {
-      /*
-       * Un solo pokemon buscado no tiene "próxima página" -
-       * el scroll infinito es solo para el modo lista.
-       */
       if (entries[0].isIntersecting && !pokemon.value) {
         loadMore()
       }
@@ -57,12 +48,6 @@ const observer = new IntersectionObserver(
     { rootMargin: '400px' }
 )
 
-/*
- * El sentinel entra y sale del DOM según `hasMore` (v-if).
- * Enganchar el observer una sola vez en onMounted es frágil si el
- * nodo todavía no existe en ese instante - watch lo re-engancha
- * cada vez que el nodo aparece o desaparece.
- */
 watch(sentinel, (node, previousNode) => {
   if (previousNode) observer.unobserve(previousNode)
   if (node) observer.observe(node)
@@ -97,7 +82,7 @@ onBeforeUnmount(() => {
   <NotFoundMessage v-else-if="showNotFoundPage" />
 
   <template v-else>
-    <div v-if="visiblePokemonList.length" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div v-if="visiblePokemonList.length" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 sm:px-6">
       <PokemonCard v-for="p in visiblePokemonList" :key="p.id" :pokemon="p" />
     </div>
 

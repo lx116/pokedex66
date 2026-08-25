@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-25T00:00:00.000Z",
+  "title": "Design System: Pokedex66",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#1a1a1a", "tonalRamp": ["#0d0d0d", "#1a1a1a", "#333333", "#4d4d4d", "#666666", "#9e9e9e", "#c7c7c7", "#f2f2f2"] },
+      "ink-secondary": { "role": "neutral", "displayName": "Tinta Secundaria", "canonical": "#757575", "tonalRamp": ["#262626", "#404040", "#595959", "#757575", "#8f8f8f", "#adadad", "#cccccc", "#f0f0f0"] },
+      "ink-muted": { "role": "neutral", "displayName": "Tinta Apagada", "canonical": "#9E9E9E", "tonalRamp": ["#333333", "#4d4d4d", "#666666", "#808080", "#9e9e9e", "#bfbfbf", "#dcdcdc", "#f5f5f5"] },
+      "border": { "role": "neutral", "displayName": "Borde Perla", "canonical": "#e0e0e0", "tonalRamp": ["#4d4d4d", "#666666", "#a6a6a6", "#c7c7c7", "#e0e0e0", "#ececec", "#f5f5f5", "#fbfbfb"] },
+      "surface": { "role": "neutral", "displayName": "Superficie", "canonical": "#ffffff", "tonalRamp": ["#e6e6e6", "#ececec", "#f2f2f2", "#f7f7f7", "#fafafa", "#fcfcfc", "#fefefe", "#ffffff"] },
+      "action-blue": { "role": "accent", "displayName": "Azul de Acción (sin resolver contra Figma)", "canonical": "#2563eb", "tonalRamp": ["#0d2a75", "#123896", "#1746b8", "#1d54d6", "#2563eb", "#5385f0", "#8caaf5", "#c6d4fa"] },
+      "type-fire": { "role": "data", "displayName": "Fuego", "canonical": "#FF9800" },
+      "type-water": { "role": "data", "displayName": "Agua", "canonical": "#2196F3" },
+      "type-grass": { "role": "data", "displayName": "Planta", "canonical": "#8BC34A" },
+      "type-electric": { "role": "data", "displayName": "Eléctrico", "canonical": "#FDD835" },
+      "type-poison": { "role": "data", "displayName": "Veneno", "canonical": "#9C27B0" },
+      "type-psychic": { "role": "data", "displayName": "Psíquico", "canonical": "#673AB7" },
+      "type-ice": { "role": "data", "displayName": "Hielo", "canonical": "#3D8BFF" },
+      "type-dragon": { "role": "data", "displayName": "Dragón", "canonical": "#00ACC1" },
+      "type-fairy": { "role": "data", "displayName": "Hada", "canonical": "#E91E63" },
+      "type-fighting": { "role": "data", "displayName": "Lucha", "canonical": "#E53935" },
+      "type-flying": { "role": "data", "displayName": "Volador", "canonical": "#00BCD4" },
+      "type-ghost": { "role": "data", "displayName": "Fantasma", "canonical": "#8E24AA" },
+      "type-ground": { "role": "data", "displayName": "Tierra", "canonical": "#FFB300" },
+      "type-rock": { "role": "data", "displayName": "Roca", "canonical": "#795548" },
+      "type-bug": { "role": "data", "displayName": "Bicho", "canonical": "#43A047" },
+      "type-steel": { "role": "data", "displayName": "Acero", "canonical": "#546E7A" },
+      "type-normal": { "role": "data", "displayName": "Normal", "canonical": "#546E7A" },
+      "type-dark": { "role": "data", "displayName": "Siniestro", "canonical": "#546E7A" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Poppins)", "purpose": "Exclusivo para texto que nombra al pokemon: nombre en card y detalle." },
+      "body": { "displayName": "Body (sistema)", "purpose": "Descripciones y texto de apoyo." },
+      "label": { "displayName": "Label (sistema)", "purpose": "Labels uppercase de stat-card y secciones." }
+    },
+    "shadows": [],
+    "motion": [],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botón de acción principal (aplicar filtros, reintentar carga).",
+      "html": "<button class=\"ds-btn-primary\">Aplicar</button>",
+      "css": ".ds-btn-primary { background: #2563eb; color: #ffffff; padding: 12px 24px; border-radius: 999px; border: none; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s, transform 0.1s; } .ds-btn-primary:hover { background: #1d54d6; } .ds-btn-primary:focus-visible { outline: 2px solid #1a1a1a; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Type Chip",
+      "kind": "chip",
+      "refersTo": "chip-type",
+      "description": "Chip de tipo de pokemon: fondo = color del tipo, badge circular blanco con ícono.",
+      "html": "<button class=\"ds-chip-type\"><span class=\"ds-chip-badge\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#FF9800\" stroke-width=\"2\"><path d=\"M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z\"/></svg></span><span>Fuego</span></button>",
+      "css": ".ds-chip-type { display: inline-flex; align-items: center; gap: 5.8px; background: #FF9800; color: #ffffff; border: none; border-radius: 48.61px; padding: 2.9px 6px; font-weight: 600; font-size: 14px; cursor: pointer; } .ds-chip-badge { width: 20px; height: 20px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }"
+    },
+    {
+      "name": "Pokemon Card",
+      "kind": "card",
+      "refersTo": "card-pokemon",
+      "description": "Card de listado: fondo = color del tipo primario a 42%, contenedor de imagen a 72%.",
+      "html": "<div class=\"ds-card-pokemon\"><div class=\"ds-card-info\"><p class=\"ds-card-number\">Nº001</p><p class=\"ds-card-name\">Bulbasaur</p></div><div class=\"ds-card-image\"><span style=\"color:#fff;font-size:11px\">img</span></div></div>",
+      "css": ".ds-card-pokemon { width: 100%; max-width: 328px; height: 102px; border-radius: 16px; padding-left: 16px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; background: rgba(139, 195, 74, 0.42); } .ds-card-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding-right: 12px; } .ds-card-number { font-size: 12px; color: #1a1a1a; } .ds-card-name { font-family: Poppins, sans-serif; font-weight: 600; font-size: 21px; color: #1a1a1a; } .ds-card-image { position: relative; width: 126px; height: 100%; border-radius: 16px; background: rgba(139, 195, 74, 0.72); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }"
+    },
+    {
+      "name": "Stat Card",
+      "kind": "custom",
+      "refersTo": "stat-card",
+      "description": "Caja de dato en la vista de detalle (peso, altura, categoría, habilidad).",
+      "html": "<div class=\"ds-stat-card\"><div class=\"ds-stat-label\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#757575\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/></svg><span>Peso</span></div><div class=\"ds-stat-value\">6,9 kg</div></div>",
+      "css": ".ds-stat-card { border: 1px solid #e0e0e0; border-radius: 14px; padding: 10px 14px 12px; background: #ffffff; } .ds-stat-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: #757575; margin-bottom: 10px; } .ds-stat-value { font-size: 20px; font-weight: 600; color: #1a1a1a; }"
+    },
+    {
+      "name": "Type Icon Backdrop",
+      "kind": "custom",
+      "refersTo": "type-icon-backdrop",
+      "description": "Marca de agua del ícono de tipo, enmascarada con gradiente blanco diagonal. Componente de firma reusado en dos escalas (card y hero de detalle).",
+      "html": "<div class=\"ds-icon-backdrop\"></div>",
+      "css": ".ds-icon-backdrop { width: 126px; height: 102px; background: linear-gradient(147.44deg, #ffffff 0.68%, rgba(255,255,255,0) 101.63%); -webkit-mask-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z%22/%3E%3C/svg%3E'); mask-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z%22/%3E%3C/svg%3E'); mask-repeat: no-repeat; mask-position: center; mask-size: 100px 96px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Manual de Campo",
+    "overview": "Pokedex66 se lee como una ficha de campo: precisa, sin adornos, donde cada dato tiene su lugar fijo y el único elemento que cambia de una pantalla a otra es el color, dictado siempre por el tipo del pokemon que se está mostrando. No hay una paleta de marca propia — el color de marca literalmente lo elige el dato. El resto de la interfaz vive en una escala de grises neutros que nunca compite con ese acento. Este sistema documenta lo que ya existe en el código, que a su vez sigue un Figma ya entregado como parte de una prueba técnica: el Figma es la fuente de verdad, este archivo es referencia para iteración.",
+    "keyCharacteristics": [
+      "Flat por completo: cero box-shadow en toda la base de código.",
+      "Un único acento por pantalla: el color del tipo de pokemon, nunca un color de marca fijo.",
+      "Poppins (600) reservado exclusivamente para texto identitario del pokemon.",
+      "Chips, cards y stat-boxes comparten el mismo lenguaje de esquinas redondeadas y borde de 1px."
+    ],
+    "rules": [
+      { "name": "El Único Acento", "body": "Ninguna pantalla define un color de marca fijo. El único acento permitido es el color del tipo de pokemon activo; todo lo demás es escala de grises.", "section": "colors" },
+      { "name": "Poppins Exclusivo", "body": "Poppins se usa solo para texto que nombra al pokemon mismo. Cualquier otro texto de interfaz usa la tipografía del sistema.", "section": "typography" },
+      { "name": "Flat-Siempre", "body": "Ningún componente usa box-shadow. La separación se resuelve con color de superficie o borde de 1px, nunca con elevación.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do seguir el Figma entregado al pixel cuando exista referencia para esa pantalla.",
+      "Do usar el color del tipo de pokemon como único acento.",
+      "Do reservar Poppins 600 exclusivamente para texto que nombra al pokemon.",
+      "Do reusar TypeChip, StatCard, TypeIconBackdrop y PokeballLoader antes de crear un componente nuevo."
+    ],
+    "donts": [
+      "Don't agregar box-shadow en ningún componente.",
+      "Don't cargar otro peso de Poppins.",
+      "Don't tratar #2563eb/#2196f3 como tokens resueltos sin confirmarlos contra el Figma."
+    ]
+  }
+}
