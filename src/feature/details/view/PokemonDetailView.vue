@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import {ArrowsUpDownIcon, ScaleIcon, Squares2X2Icon} from "@heroicons/vue/24/outline";
+import {ArrowsUpDownIcon, ScaleIcon, ShareIcon, Squares2X2Icon} from "@heroicons/vue/24/outline";
 import {POKEMON_TYPES, type PokemonTypeMeta} from "@/core/models/typeMeta";
 import {formatDecimalEs} from "@/core/utils/format";
 import {usePokemonDetailViewModel} from "@/feature/details/viewmodel/usePokemonDetailViewModel";
@@ -66,6 +66,26 @@ const primaryColor = computed(() => typeMetas.value[0]?.color ?? "#9E9E9E");
 const paddedId = computed(() => String(pokemon.value?.id ?? 0).padStart(3, "0"));
 const weightKg = computed(() => formatDecimalEs((pokemon.value?.weight ?? 0) / 10));
 const heightM = computed(() => formatDecimalEs((pokemon.value?.height ?? 0) / 10));
+
+const shared = ref(false);
+
+async function sharePokemon() {
+  if (!pokemon.value) return;
+
+  const data = [
+    pokemon.value.name,
+    ...typeMetas.value.map(type => type.name),
+    `${weightKg.value} kg`,
+    `${heightM.value} m`,
+    pokemon.value.category,
+    pokemon.value.ability,
+  ].join(", ");
+
+  await navigator.clipboard.writeText(data);
+
+  shared.value = true;
+  setTimeout(() => (shared.value = false), 2000);
+}
 </script>
 
 <template>
@@ -176,6 +196,11 @@ const heightM = computed(() => formatDecimalEs((pokemon.value?.height ?? 0) / 10
           />
         </div>
       </template>
+
+      <button type="button" class="pokemon-detail-share" @click="sharePokemon">
+        <ShareIcon class="pokemon-detail-share-icon"/>
+        {{ shared ? '¡Copiado!' : 'Compartir Pokémon' }}
+      </button>
     </div>
   </div>
   </div>
@@ -323,6 +348,32 @@ const heightM = computed(() => formatDecimalEs((pokemon.value?.height ?? 0) / 10
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 16px;
+}
+
+.pokemon-detail-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 32px;
+  padding: 14px;
+
+  border: none;
+  border-radius: 12px;
+  background: v-bind(primaryColor);
+
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+
+  cursor: pointer;
+}
+
+.pokemon-detail-share-icon {
+  width: 20px;
+  height: 20px;
 }
 
 @media (min-width: 768px) {
