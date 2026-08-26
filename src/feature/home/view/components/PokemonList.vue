@@ -3,6 +3,7 @@ import { onBeforeUnmount, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { usePokemonStore } from "../../store/usePokemonStore"
 import PokemonCard from "./PokemonCard.vue"
+import PokemonGrid from "@/components/PokemonGrid.vue"
 import PokeballLoader from "@/components/PokeballLoading.vue"
 import ErrorMessage from "./ErrorMessage.vue"
 import NotFoundMessage from "./NotFoundMessage.vue"
@@ -82,9 +83,11 @@ onBeforeUnmount(() => {
   <NotFoundMessage v-else-if="showNotFoundPage" />
 
   <template v-else>
-    <div v-if="visiblePokemonList.length" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 sm:px-6">
-      <PokemonCard v-for="p in visiblePokemonList" :key="p.id" :pokemon="p" />
-    </div>
+    <PokemonGrid v-if="visiblePokemonList.length" :pokemons="visiblePokemonList">
+      <template #default="{ pokemon: p }">
+        <PokemonCard :pokemon="p" />
+      </template>
+    </PokemonGrid>
 
     <div v-if="!pokemon && hasMore" ref="sentinel" class="h-4"></div>
 

@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed} from "vue";
 import {ArrowLeftIcon, HeartIcon as HeartOutlineIcon} from "@heroicons/vue/24/outline";
 import {HeartIcon as HeartSolidIcon} from "@heroicons/vue/24/solid";
+import {useFavoritePokemonStore} from "@/core/store/useFavoritePokemonStore";
+
+const props = defineProps<{
+  pokemonName: string;
+}>();
 
 defineEmits<{
   back: [];
 }>();
 
-const isFavorite = ref(false);
+const favoriteStore = useFavoritePokemonStore();
+
+const isFavorite = computed(() => favoriteStore.isFavorite(props.pokemonName));
 </script>
 
 <template>
@@ -24,8 +31,9 @@ const isFavorite = ref(false);
     <button
         type="button"
         class="icon-button"
+        :class="{ 'icon-button-favorite': isFavorite }"
         :aria-label="isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
-        @click="isFavorite = !isFavorite"
+        @click="favoriteStore.toggleFavorite(pokemonName)"
     >
       <component :is="isFavorite ? HeartSolidIcon : HeartOutlineIcon" class="icon"/>
     </button>
@@ -58,6 +66,10 @@ const isFavorite = ref(false);
   cursor: pointer;
 
   color: #fff;
+}
+
+.icon-button-favorite {
+  color: #E53935;
 }
 
 .icon {
