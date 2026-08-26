@@ -30,7 +30,7 @@
     },
     {
       "fighting": {
-        "icon": "fight.svg",
+        "icon": "figth.svg",
         "color": "#E53935",
         "spanish_name": "Lucha"
       }

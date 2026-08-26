@@ -50,7 +50,7 @@ function retry() {
 }
 
 function goBack() {
-  router.back();
+  router.push('/');
 }
 
 function lookupTypes(names: string[]): PokemonTypeMeta[] {
@@ -91,7 +91,7 @@ const heightM = computed(() => formatDecimalEs((pokemon.value?.height ?? 0) / 10
   <div v-else-if="pokemon" class="pokemon-detail">
     <div class="pokemon-detail-hero-wrap">
       <div class="pokemon-detail-hero" :style="{ backgroundColor: primaryColor }">
-        <DetailHeader @back="goBack"/>
+        <DetailHeader :pokemon-name="pokemon.name" @back="goBack"/>
 
         <TypeIconBackdrop
             v-if="typeMetas[0]"
