@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {computed, onBeforeUnmount, onMounted} from 'vue'
 import {
   HomeIcon,
   HeartIcon,
@@ -7,6 +8,8 @@ import {
 } from '@heroicons/vue/24/solid'
 
 import pokedexIcon from '@/assets/pokedex_icon.png'
+import EncounterToast from '@/components/EncounterToast.vue'
+import {tick, usePokemonJourney} from '@/feature/profile/composables/usePokemonJourney'
 
 const navigation = [
   { name: 'Pokedex', icon: HomeIcon, href: '/' },
@@ -14,6 +17,19 @@ const navigation = [
   { name: 'Favoritos', icon: HeartIcon, href: '/favorites' },
   { name: 'Perfil', icon: UserIcon, href: '/profile' },
 ]
+
+const {status} = usePokemonJourney()
+const hasPendingEncounter = computed(() => status.value === 'encounter')
+
+let tickTimer: ReturnType<typeof setInterval> | null = null
+
+onMounted(() => {
+  tickTimer = setInterval(tick, 1000)
+})
+
+onBeforeUnmount(() => {
+  if (tickTimer) clearInterval(tickTimer)
+})
 </script>
 
 <template>
@@ -59,10 +75,16 @@ const navigation = [
     "
             exact-active-class="bg-blue-100 text-blue-700"
         >
-          <component
-              :is="item.icon"
-              class="h-5 w-5"
-          />
+          <span class="relative">
+            <component
+                :is="item.icon"
+                class="h-5 w-5"
+            />
+            <span
+                v-if="item.name === 'Perfil' && hasPendingEncounter"
+                class="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-blue-600"
+            />
+          </span>
 
           <span>
             {{ item.name }}
@@ -111,10 +133,16 @@ const navigation = [
     "
             exact-active-class="text-blue-900"
         >
-          <component
-              :is="item.icon"
-              class="h-5 w-5"
-          />
+          <span class="relative">
+            <component
+                :is="item.icon"
+                class="h-5 w-5"
+            />
+            <span
+                v-if="item.name === 'Perfil' && hasPendingEncounter"
+                class="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-blue-600"
+            />
+          </span>
 
           <span>
             {{ item.name }}
@@ -122,6 +150,8 @@ const navigation = [
         </RouterLink>
       </div>
     </nav>
+
+    <EncounterToast/>
 
   </div>
 </template>
