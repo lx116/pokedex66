@@ -178,17 +178,18 @@ const deleteIconStyle = computed(() => ({
       class="swipe-item"
       :class="{ 'swipe-item-deleting': isDeleting }"
   >
-    <!-- Acción de eliminar -->
     <button
         type="button"
         class="swipe-delete"
         aria-label="Eliminar de favoritos"
         @click.stop="onDeleteClick"
     >
-      <TrashIcon
-          class="swipe-delete-icon"
+      <div
+          class="swipe-delete-action"
           :style="deleteIconStyle"
-      />
+      >
+        <TrashIcon class="swipe-delete-icon" />
+      </div>
     </button>
 
     <!-- Card que se mueve -->
@@ -214,8 +215,6 @@ const deleteIconStyle = computed(() => ({
 .swipe-item {
   position: relative;
 
-  /* MUY IMPORTANTE:
-     mismo ancho que PokemonCard */
   width: 100%;
   max-width: 328px;
 
@@ -224,8 +223,16 @@ const deleteIconStyle = computed(() => ({
   border-radius: 16px;
 
   isolation: isolate;
+
+  /*
+   * El fondo que aparece detrás de la card
+   * forma parte visualmente del contenedor.
+   */
+  background: #fff1f0;
 }
 
+
+/* Área revelada por el swipe */
 .swipe-delete {
   position: absolute;
 
@@ -242,9 +249,7 @@ const deleteIconStyle = computed(() => ({
   padding: 0;
 
   border: none;
-
-  background: #ef5350;
-  color: white;
+  background: transparent;
 
   cursor: pointer;
 
@@ -253,62 +258,43 @@ const deleteIconStyle = computed(() => ({
   -webkit-tap-highlight-color: transparent;
 }
 
+
+/* Botón real */
+.swipe-delete-action {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #ef5350;
+  color: white;
+
+  box-shadow:
+      0 2px 6px rgba(239, 83, 80, 0.18);
+
+  transition:
+      opacity 120ms ease,
+      transform 120ms ease,
+      background-color 120ms ease;
+}
+
+
+.swipe-delete:hover .swipe-delete-action {
+  background: #e04845;
+}
+
+
+.swipe-delete:active .swipe-delete-action {
+  transform: scale(0.94);
+}
+
+
 .swipe-delete-icon {
-  width: 24px;
-  height: 24px;
-
-  transition:
-      opacity 100ms linear,
-      transform 100ms linear;
-}
-
-.swipe-content {
-  position: relative;
-
-  width: 100%;
-
-  z-index: 1;
-
-  will-change: transform;
-
-  touch-action: pan-y;
-
-  transition:
-      transform 260ms cubic-bezier(
-          0.22,
-          0.8,
-          0.25,
-          1
-      );
-}
-
-.swipe-content-dragging {
-  transition: none;
-}
-
-.swipe-content-deleting {
-  transition:
-      transform 240ms cubic-bezier(
-          0.4,
-          0,
-          0.2,
-          1
-      );
-}
-
-.swipe-item-deleting {
-  pointer-events: none;
-
-  animation: remove-item 240ms ease forwards;
-}
-
-@keyframes remove-item {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
+  width: 22px;
+  height: 22px;
 }
 </style>
