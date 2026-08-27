@@ -243,24 +243,28 @@ async function sharePokemon() {
 .pokemon-detail-sprite-slot {
   position: absolute;
   left: 50%;
-  bottom: -200px;
+  bottom: -180px;
   z-index: 2;
 
-  width: 400px;
-  height: 400px;
+  width: min(88vw, 400px);
+  aspect-ratio: 1;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   transform: translateX(-50%);
+
+  pointer-events: none;
 }
 
 .pokemon-detail-sprite {
-  width: 400px;
-  height: 400px;
+  width: 82%;
+  height: 82%;
 
   object-fit: contain;
+
+  object-position: center;
 }
 
 .pokemon-detail-sprite-reveal {
@@ -285,7 +289,7 @@ async function sharePokemon() {
   display: flex;
   flex-direction: column;
 
-  margin-top: 96px;
+  margin-top: 110px;
 
   padding: 20px 16px;
 }

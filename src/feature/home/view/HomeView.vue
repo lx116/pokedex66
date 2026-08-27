@@ -6,7 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import { AdjustmentsHorizontalIcon, ChevronDownIcon, ChevronUpIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { usePokemonStore } from "../store/usePokemonStore";
 import { POKEMON_TYPES } from "@/core/models/typeMeta";
-import SearchPokemon from "./components/SearchPokemon.vue";
+import SearchPokemon from "./components/SearchPokemon/SearchPokemon.vue";
 import TypeFilterChips from "./components/TypeFilterChips/TypeFilterChips.vue";
 import TypeFilterModal from "./components/TypeFilterModal/TypeFilterModal.vue";
 import PokemonList from "./components/PokemonList/PokemonList.vue";

@@ -49,15 +49,15 @@ const navigation = [
             :key="item.name"
             :to="item.href"
             class="
-            flex items-center gap-3
-            rounded-lg
-            px-3 py-2
-            text-gray-600
-            transition
-            hover:bg-gray-100
-            hover:text-gray-900
-          "
-            active-class="bg-blue-100 text-blue-700"
+      flex items-center gap-3
+      rounded-lg
+      px-3 py-2
+      text-gray-600
+      transition
+      hover:bg-gray-100
+      hover:text-gray-900
+    "
+            exact-active-class="bg-blue-100 text-blue-700"
         >
           <component
               :is="item.icon"
@@ -101,15 +101,15 @@ const navigation = [
             :key="item.name"
             :to="item.href"
             class="
-            flex flex-1
-            flex-col
-            items-center
-            justify-center
-            gap-1
-            text-xs
-            text-gray-500
-          "
-            active-class="text-gray-900"
+      flex flex-1
+      flex-col
+      items-center
+      justify-center
+      gap-1
+      text-xs
+      text-gray-500
+    "
+            exact-active-class="text-blue-900"
         >
           <component
               :is="item.icon"
