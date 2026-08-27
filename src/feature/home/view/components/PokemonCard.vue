@@ -5,7 +5,7 @@ import { Pokemon } from "@/core/models/pokemonModel";
 import { POKEMON_TYPES, type PokemonTypeMeta } from "@/core/models/typeMeta";
 import { hexToRgba } from "@/core/utils/color";
 import { useFavoritePokemonStore } from "@/core/store/useFavoritePokemonStore";
-import TypeChip from "./TypeChip.vue";
+import TypeChip from "./TypeChip/TypeChip.vue";
 import TypeIconBackdrop from "./TypeIconBackdrop.vue";
 import favoriteIcon from "@/assets/favorite.svg";
 import favoriteEmptyIcon from "@/assets/favorite_empty.svg";
@@ -62,7 +62,7 @@ const paddedId = computed(() => String(props.pokemon.id).padStart(3, '0'))
 
       <p
           class="truncate"
-          style="font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 21px; line-height: 100%; letter-spacing: 0%;"
+          style="font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 21px; line-height: 100%; letter-spacing: 0;"
       >
         {{ pokemon.name }}
       </p>

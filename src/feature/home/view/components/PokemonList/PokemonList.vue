@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { usePokemonStore } from "../../store/usePokemonStore"
-import PokemonCard from "./PokemonCard.vue"
+import { usePokemonStore } from "../../../store/usePokemonStore"
+import PokemonCard from "../PokemonCard.vue"
 import PokemonGrid from "@/components/PokemonGrid.vue"
 import PokeballLoader from "@/components/PokeballLoading.vue"
-import ErrorMessage from "./ErrorMessage.vue"
-import NotFoundMessage from "./NotFoundMessage.vue"
+import ErrorMessage from "../Messages/ErrorMessage.vue"
+import NotFoundMessage from "../Messages/NotFoundMessage.vue"
 
 const store = usePokemonStore()
 const {
@@ -17,8 +17,9 @@ const {
   error,
   notFound,
   hasMore,
+  selectedTypes,
 } = storeToRefs(store)
-const { loadMore, fetchAllPokemon } = store
+const { loadMore, applyTypeFilters } = store
 
 
 const revealed = ref(true)
@@ -35,7 +36,7 @@ watch(loading, (isLoading) => {
 
 function retry() {
   showErrorPage.value = false
-  fetchAllPokemon()
+  applyTypeFilters(selectedTypes.value)
 }
 
 const sentinel = ref<HTMLElement | null>(null)
@@ -100,7 +101,7 @@ watch(loadingMore, (isLoadingMore) => {
     <div v-if="!pokemon && hasMore" ref="sentinel" class="h-4"></div>
 
     <div v-if="loadingMore" class="flex justify-center py-6">
-      <img src="@/assets/pokeball.svg" class="w-8 h-8 animate-spin" alt="Cargando más" />
+      <img src="../../../../../assets/pokeball.svg" class="w-8 h-8 animate-spin" alt="Cargando más" />
     </div>
   </template>
 </template>

@@ -6,7 +6,7 @@
 
     <div class="relative">
       <img
-          src="@/assets/404psy.png"
+          src="../../../../../assets/404psy.png"
           alt="No encontrado"
           class="w-64 h-64 object-contain pokemon-disabled"
       />

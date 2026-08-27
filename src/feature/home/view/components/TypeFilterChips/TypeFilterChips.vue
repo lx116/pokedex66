@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { usePokemonStore } from "../../store/usePokemonStore";
+import { usePokemonStore } from "../../../store/usePokemonStore";
 import { POKEMON_TYPES } from "@/core/models/typeMeta";
-import TypeChip from "./TypeChip.vue";
+import TypeChip from "../TypeChip/TypeChip.vue";
 
 const store = usePokemonStore()
 const { selectedTypes } = storeToRefs(store)
-const { toggleTypeFilter } = store
+const emit = defineEmits<{'toggle-type': [typeName: string]}>()
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const { toggleTypeFilter } = store
         :key="type.name"
         :type="type"
         :selected="selectedTypes.includes(type.name)"
-        @toggle="toggleTypeFilter(type.name)"
+        @toggle="emit('toggle-type', type.name)"
     />
   </div>
 </template>
