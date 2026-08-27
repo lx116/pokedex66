@@ -1,0 +1,22 @@
+{
+  "starters": [
+    {
+      "id": 1,
+      "name": "bulbasaur",
+      "spanishName": "Bulbasaur",
+      "imageUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+    },
+    {
+      "id": 4,
+      "name": "charmander",
+      "spanishName": "Charmander",
+      "imageUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+    },
+    {
+      "id": 7,
+      "name": "squirtle",
+      "spanishName": "Squirtle",
+      "imageUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 import {useFavoritesViewModel} from "./viewmodel/useFavoritesViewModel";
 import {useFavoritePokemonStore} from "@/core/store/useFavoritePokemonStore";
 import PokemonGrid from "@/components/PokemonGrid.vue";
-import SwipeableFavoriteCard from "./components/SwipeableFavoriteCard.vue";
+import SwipeableCard from "@/components/SwipeableCard.vue";
 import FavoritesEmptyMessage from "./components/FavoritesEmptyMessage.vue";
 
 const {favoritePokemons, loading} = useFavoritesViewModel();
@@ -21,8 +21,9 @@ const favoriteStore = useFavoritePokemonStore();
 
     <PokemonGrid v-else :pokemons="favoritePokemons">
       <template #default="{ pokemon }">
-        <SwipeableFavoriteCard
+        <SwipeableCard
             :pokemon="pokemon"
+            delete-label="Eliminar de favoritos"
             @remove="favoriteStore.toggleFavorite(pokemon.name)"
         />
       </template>

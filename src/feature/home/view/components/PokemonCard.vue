@@ -10,9 +10,12 @@ import TypeIconBackdrop from "./TypeIconBackdrop.vue";
 import favoriteIcon from "@/assets/favorite.svg";
 import favoriteEmptyIcon from "@/assets/favorite_empty.svg";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   pokemon: Pokemon
-}>()
+  clickable?: boolean
+}>(), {
+  clickable: true,
+})
 
 const router = useRouter();
 const favoriteStore = useFavoritePokemonStore();
@@ -20,6 +23,7 @@ const favoriteStore = useFavoritePokemonStore();
 const isFavorite = computed(() => favoriteStore.isFavorite(props.pokemon.name));
 
 function goToDetail() {
+  if (!props.clickable) return
   router.push({ name: 'pokemon-detail', params: { name: props.pokemon.name } })
 }
 

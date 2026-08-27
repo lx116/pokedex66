@@ -3,11 +3,14 @@ import { computed, ref, watch } from "vue";
 import { TrashIcon } from "@heroicons/vue/24/outline";
 import { Pokemon } from "@/core/models/pokemonModel";
 import PokemonCard from "@/feature/home/view/components/PokemonCard.vue";
-import { openSwipeId } from "../state/swipeState";
+import { openSwipeId } from "@/core/state/swipeState";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   pokemon: Pokemon;
-}>();
+  deleteLabel?: string;
+}>(), {
+  deleteLabel: "Eliminar",
+});
 
 const emit = defineEmits<{
   remove: [];
@@ -181,7 +184,7 @@ const deleteIconStyle = computed(() => ({
     <button
         type="button"
         class="swipe-delete"
-        aria-label="Eliminar de favoritos"
+        :aria-label="deleteLabel"
         @click.stop="onDeleteClick"
     >
       <div
