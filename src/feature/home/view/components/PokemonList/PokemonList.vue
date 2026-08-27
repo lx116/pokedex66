@@ -16,15 +16,27 @@ const {
   loadingMore,
   error,
   notFound,
+  notFoundMismatch,
   hasMore,
   selectedTypes,
 } = storeToRefs(store)
-const { loadMore, applyTypeFilters } = store
+const { loadMore } = store
 
+const emit = defineEmits<{
+  retry: []
+}>()
 
-const revealed = ref(true)
-const showErrorPage = ref(false)
-const showNotFoundPage = ref(false)
+/*
+ * PokemonList solo se monta después de que HomeView revela el contenido,
+ * lo que puede pasar DESPUÉS de que la carga ya haya terminado (por ejemplo,
+ * al llegar directo de un link con ?q=&types= que no matchean). En ese caso
+ * loading ya está en false al montar, y el watch de más abajo -pensado para
+ * reaccionar a una transición futura- nunca se dispara. Por eso el estado
+ * inicial refleja lo que el store ya tiene, no un default optimista.
+ */
+const revealed = ref(!loading.value)
+const showErrorPage = ref(!!error.value)
+const showNotFoundPage = ref(notFound.value)
 
 watch(loading, (isLoading) => {
   if (isLoading) {
@@ -36,7 +48,7 @@ watch(loading, (isLoading) => {
 
 function retry() {
   showErrorPage.value = false
-  applyTypeFilters(selectedTypes.value)
+  emit('retry')
 }
 
 const sentinel = ref<HTMLElement | null>(null)
@@ -89,7 +101,11 @@ watch(loadingMore, (isLoadingMore) => {
       @retry="retry"
   />
 
-  <NotFoundMessage v-else-if="showNotFoundPage" />
+  <NotFoundMessage
+      v-else-if="showNotFoundPage"
+      :mismatch="notFoundMismatch"
+      :searched-types="selectedTypes"
+  />
 
   <template v-else>
     <PokemonGrid v-if="visiblePokemonList.length" :pokemons="visiblePokemonList">

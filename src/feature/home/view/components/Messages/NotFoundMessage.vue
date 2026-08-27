@@ -1,4 +1,21 @@
 <script setup lang="ts">
+import {computed} from "vue";
+import {POKEMON_TYPES, type PokemonTypeMeta} from "@/core/models/typeMeta";
+import TypeChip from "../TypeChip/TypeChip.vue";
+
+const props = defineProps<{
+  mismatch?: { name: string; types: string[] } | null;
+  searchedTypes?: string[];
+}>()
+
+function lookupTypes(names: string[]): PokemonTypeMeta[] {
+  return names
+      .map(name => POKEMON_TYPES.find(type => type.name === name))
+      .filter((type): type is PokemonTypeMeta => !!type)
+}
+
+const searchedTypeMetas = computed(() => lookupTypes(props.searchedTypes ?? []))
+const suggestedTypeMetas = computed(() => lookupTypes(props.mismatch?.types ?? []))
 </script>
 
 <template>
@@ -20,7 +37,29 @@
       404
     </h2>
 
-    <p class="text-gray-500 text-center">
+    <template v-if="mismatch">
+      <p class="text-gray-500 text-center">
+        No existe un <span class="font-semibold text-gray-900 capitalize">{{ mismatch.name }}</span>
+        de tipo{{ searchedTypeMetas.length > 1 ? 's' : '' }}
+        {{ searchedTypeMetas.map(type => type.spanishName).join(', ') }}.
+      </p>
+
+      <p class="text-gray-500 text-center">
+        Prueba buscando en:
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-2">
+        <TypeChip
+            v-for="type in suggestedTypeMetas"
+            :key="type.name"
+            :type="type"
+            :selected="true"
+            force-white-text
+        />
+      </div>
+    </template>
+
+    <p v-else class="text-gray-500 text-center">
       No se ha encontrado lo que buscabas.
     </p>
   </div>

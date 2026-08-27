@@ -14,8 +14,8 @@ import PokeballLoader from "@/components/PokeballLoading.vue";
 import ErrorMessage from "./components/Messages/ErrorMessage.vue";
 
 const store = usePokemonStore()
-const { loading, error, selectedTypes } = storeToRefs(store)
-const { applyTypeFilters } = store
+const { loading, error, notFound, selectedTypes } = storeToRefs(store)
+const { syncFromQuery } = store
 const route = useRoute()
 const router = useRouter()
 
@@ -23,6 +23,10 @@ const showContent = ref(false)
 const showErrorPage = ref(false)
 const filterModalOpen = ref(false)
 const chipsVisible = ref(true)
+
+function normalizeQuery(raw: typeof route.query.q): string {
+  return (Array.isArray(raw) ? raw[0] : raw)?.trim() ?? ''
+}
 
 function normalizeTypes(raw: typeof route.query.types): string[] {
   const rawList = Array.isArray(raw) ? raw : (raw ?? '').split(',')
@@ -32,28 +36,56 @@ function normalizeTypes(raw: typeof route.query.types): string[] {
 }
 
 let initialLoadDone = false
+let lastAppliedQuery = ''
+let lastAppliedTypes: string[] = []
 
 watch(
-    () => route.query.types,
-    (rawTypes) => {
-      const normalized = normalizeTypes(rawTypes)
-      const currentRaw = Array.isArray(rawTypes) ? rawTypes.join(',') : (rawTypes ?? '')
+    () => [route.query.q, route.query.types],
+    ([rawQuery, rawTypes]) => {
+      const normalizedQuery = normalizeQuery(rawQuery)
+      const normalizedTypes = normalizeTypes(rawTypes)
+      const currentRawQuery = Array.isArray(rawQuery) ? (rawQuery[0] ?? '') : (rawQuery ?? '')
+      const currentRawTypes = Array.isArray(rawTypes) ? rawTypes.join(',') : (rawTypes ?? '')
 
-      if (normalized.join(',') !== currentRaw) {
-        router.replace({ query: { ...route.query, types: normalized.length ? normalized.join(',') : undefined } })
+      if (normalizedQuery !== currentRawQuery || normalizedTypes.join(',') !== currentRawTypes) {
+        router.replace({
+          query: {
+            ...route.query,
+            q: normalizedQuery || undefined,
+            types: normalizedTypes.length ? normalizedTypes.join(',') : undefined,
+          },
+        })
         return
       }
 
-      if (!initialLoadDone || normalized.join(',') !== selectedTypes.value.join(',')) {
+      const changed = normalizedQuery !== lastAppliedQuery
+          || normalizedTypes.join(',') !== lastAppliedTypes.join(',')
+
+      if (!initialLoadDone || changed) {
         initialLoadDone = true
-        applyTypeFilters(normalized)
+        lastAppliedQuery = normalizedQuery
+        lastAppliedTypes = normalizedTypes
+        syncFromQuery(normalizedQuery, normalizedTypes)
       }
     },
     { immediate: true },
 )
 
-function pushTypesQuery(nextTypes: string[]) {
-  router.push({ query: { ...route.query, types: nextTypes.length ? nextTypes.join(',') : undefined } })
+function updateQuery(overrides: { q?: string; types?: string[] }) {
+  const nextQuery = overrides.q !== undefined ? overrides.q : normalizeQuery(route.query.q)
+  const nextTypes = overrides.types !== undefined ? overrides.types : normalizeTypes(route.query.types)
+
+  router.push({
+    query: {
+      ...route.query,
+      q: nextQuery || undefined,
+      types: nextTypes.length ? nextTypes.join(',') : undefined,
+    },
+  })
+}
+
+function onSearch(query: string) {
+  updateQuery({ q: query })
 }
 
 function onToggleType(typeName: string) {
@@ -62,20 +94,20 @@ function onToggleType(typeName: string) {
       ? selectedTypes.value.filter(t => t !== typeName)
       : [...selectedTypes.value, typeName]
 
-  pushTypesQuery(nextTypes)
+  updateQuery({ types: nextTypes })
 }
 
 function onApplyTypes(typeNames: string[]) {
-  pushTypesQuery(typeNames)
+  updateQuery({ types: typeNames })
 }
 
 function clearFilters() {
-  pushTypesQuery([])
+  updateQuery({ types: [] })
 }
 
 function retry() {
   showErrorPage.value = false
-  applyTypeFilters(selectedTypes.value)
+  syncFromQuery(normalizeQuery(route.query.q), normalizeTypes(route.query.types))
 }
 </script>
 
@@ -85,8 +117,10 @@ function retry() {
     <PokeballLoader
         :loading="loading"
         :error="!!error"
+        :not-found="notFound"
         @complete="showContent = true"
         @error-complete="showErrorPage = true"
+        @not-found-complete="showContent = true"
     />
   </div>
 
@@ -99,7 +133,7 @@ function retry() {
   <Transition v-else name="reveal">
     <div v-if="showContent">
       <div class="sticky top-0 z-20 bg-gray-50 pb-2">
-        <SearchPokemon>
+        <SearchPokemon :initial-query="normalizeQuery(route.query.q)" @search="onSearch">
           <template #actions>
             <button
                 type="button"
@@ -153,7 +187,7 @@ function retry() {
 
       <TypeFilterModal :open="filterModalOpen" @close="filterModalOpen = false" @apply="onApplyTypes" />
 
-      <PokemonList/>
+      <PokemonList @retry="retry"/>
     </div>
   </Transition>
 </div>

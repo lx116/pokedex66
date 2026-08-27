@@ -15,6 +15,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
     const loadingMore = ref(false);
     const error = ref<string | null>(null);
     const notFound = ref(false);
+    const notFoundMismatch = ref<{ name: string; types: string[] } | null>(null);
 
     const namesPool = ref<{ name: string; url: string }[]>([]);
     const selectedTypes = ref<string[]>([]);
@@ -58,20 +59,6 @@ export const usePokemonStore = defineStore('pokemon', () => {
         } finally {
             loading.value = false;
         }
-    }
-
-    async function findPokemon(pokemonName: string) {
-        const normalizedName = pokemonName.trim().toLowerCase()
-        const alreadyLoaded = pokemonList.value.find(p => p.name.toLowerCase() === normalizedName)
-
-        if (alreadyLoaded) {
-            pokemon.value = alreadyLoaded
-            error.value = null
-            notFound.value = false
-            return
-        }
-
-        await fetchAPokemon(pokemonName)
     }
 
     async function hydrateNextBatch() {
@@ -182,13 +169,52 @@ export const usePokemonStore = defineStore('pokemon', () => {
         await filterPokemonListByTypes(typeNames)
     }
 
-    async function toggleTypeFilter(typeName: string) {
-        const index = selectedTypes.value.indexOf(typeName)
-        const nextSelection = index === -1
-            ? [...selectedTypes.value, typeName]
-            : selectedTypes.value.filter(type => type !== typeName)
+    /*
+     * Único punto de entrada para el estado de la URL (q + types).
+     * Con query: trae ESE pokemon (una sola consulta) y valida en memoria
+     * que su tipo intersecte los tipos seleccionados (semántica AND).
+     * Sin query: delega en el filtrado por tipo de siempre.
+     */
+    async function syncFromQuery(query: string, types: string[]) {
+        selectedTypes.value = types
+        notFoundMismatch.value = null
 
-        await applyTypeFilters(nextSelection)
+        if (!query) {
+            pokemon.value = null
+            await applyTypeFilters(types)
+            return
+        }
+
+        /*
+         * No delegamos en fetchAPokemon: esa función cierra `loading` en su
+         * propio finally, y recién después podríamos detectar el desajuste
+         * de tipos. Eso deja `loading=false` con `notFound` todavía sin
+         * actualizar por un tick, y PokeballLoading.vue —que decide su
+         * animación comparando ambos en el mismo cambio reactivo— nunca
+         * llega a "notFound" (ver bug reportado). Acá resolvemos todo
+         * (pokemon/notFound/notFoundMismatch) antes de soltar loading.
+         */
+        loading.value = true;
+        error.value = null;
+        notFound.value = false;
+
+        try {
+            const response = await api.get(POKEMON_ENDPOINTS.one(query))
+            const fetchedPokemon = createPokemon(response.data)
+            const matchesTypes = types.length === 0 || fetchedPokemon.types.some(type => types.includes(type))
+
+            if (matchesTypes) {
+                pokemon.value = fetchedPokemon
+            } else {
+                notFoundMismatch.value = { name: fetchedPokemon.name, types: fetchedPokemon.types }
+                pokemon.value = null
+                notFound.value = true
+            }
+        } catch (caughtError) {
+            handleFetchFailure(caughtError)
+        } finally {
+            loading.value = false;
+        }
     }
 
     async function loadMore() {
@@ -219,14 +245,14 @@ export const usePokemonStore = defineStore('pokemon', () => {
         loadingMore,
         error,
         notFound,
+        notFoundMismatch,
         hasMore,
         selectedTypes,
         fetchAPokemon,
-        findPokemon,
         fetchAllPokemon,
         filterPokemonListByTypes,
         applyTypeFilters,
-        toggleTypeFilter,
+        syncFromQuery,
         loadMore,
     }
 })

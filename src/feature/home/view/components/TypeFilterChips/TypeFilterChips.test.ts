@@ -13,7 +13,6 @@ describe('TypeFilterChips', () => {
   it('emite toggle-type con el nombre del tipo clickeado, sin llamar al store', () => {
     const store = usePokemonStore()
     const applySpy = vi.spyOn(store, 'applyTypeFilters')
-    const toggleSpy = vi.spyOn(store, 'toggleTypeFilter')
 
     const wrapper = mount(TypeFilterChips)
     const fireChip = wrapper.findAllComponents(TypeChip).find(c => c.props('type').name === 'fire')!
@@ -22,7 +21,6 @@ describe('TypeFilterChips', () => {
 
     expect(wrapper.emitted('toggle-type')).toEqual([['fire']])
     expect(applySpy).not.toHaveBeenCalled()
-    expect(toggleSpy).not.toHaveBeenCalled()
   })
 
   it('marca como selected los tipos que ya están aplicados en el store', () => {
