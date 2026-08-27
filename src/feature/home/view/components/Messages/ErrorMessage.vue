@@ -10,7 +10,7 @@ const emit = defineEmits<{
   <div class="min-h-screen flex flex-col items-center justify-center text-center gap-5 p-6">
 
     <img
-        src="@/assets/magickarp.svg"
+        src="../../../../../assets/magickarp.svg"
         alt="Magikarp"
         class="w-80 h-80 object-contain"
     />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { usePokemonStore } from "../../store/usePokemonStore";
+import { usePokemonStore } from "../../../store/usePokemonStore";
 import { POKEMON_TYPES } from "@/core/models/typeMeta";
 
 const props = defineProps<{
@@ -9,10 +9,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: [];
+  apply: [typeNames: string[]]
 }>()
 
 const store = usePokemonStore()
-const { applyTypeFilters } = store
 
 const draftSelection = ref<string[]>([])
 const typeSectionExpanded = ref(true)
@@ -33,8 +33,8 @@ function toggleDraft(typeName: string) {
   }
 }
 
-async function apply() {
-  await applyTypeFilters(draftSelection.value)
+function apply() {
+  emit('apply', draftSelection.value)
   emit('close')
 }
 

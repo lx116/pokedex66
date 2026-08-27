@@ -4,7 +4,7 @@ import {createPinia, setActivePinia} from 'pinia'
 import {nextTick} from 'vue'
 import PokemonList from './PokemonList.vue'
 import PokemonGrid from '@/components/PokemonGrid.vue'
-import {usePokemonStore} from '../../store/usePokemonStore'
+import {usePokemonStore} from '../../../store/usePokemonStore'
 import api from '@/core/api/api'
 
 vi.mock('@/core/api/api', () => ({

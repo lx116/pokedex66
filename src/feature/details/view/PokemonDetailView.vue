@@ -5,11 +5,11 @@ import {ArrowsUpDownIcon, ScaleIcon, ShareIcon, Squares2X2Icon} from "@heroicons
 import {POKEMON_TYPES, type PokemonTypeMeta} from "@/core/models/typeMeta";
 import {formatDecimalEs} from "@/core/utils/format";
 import {usePokemonDetailViewModel} from "@/feature/details/viewmodel/usePokemonDetailViewModel";
-import TypeChip from "@/feature/home/view/components/TypeChip.vue";
+import TypeChip from "@/feature/home/view/components/TypeChip/TypeChip.vue";
 import TypeIconBackdrop from "@/feature/home/view/components/TypeIconBackdrop.vue";
 import PokeballLoader from "@/components/PokeballLoading.vue";
-import ErrorMessage from "@/feature/home/view/components/ErrorMessage.vue";
-import NotFoundMessage from "@/feature/home/view/components/NotFoundMessage.vue";
+import ErrorMessage from "@/feature/home/view/components/Messages/ErrorMessage.vue";
+import NotFoundMessage from "@/feature/home/view/components/Messages/NotFoundMessage.vue";
 import DetailHeader from "./components/DetailHeader.vue";
 import StatCard from "./components/StatCard.vue";
 import GenderBar from "./components/GenderBar.vue";

@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import PokeballLoader from "@/components/PokeballLoading.vue";
-import NotFoundMessage from "@/feature/home/view/components/NotFoundMessage.vue";
+import NotFoundMessage from "@/feature/home/view/components/Messages/NotFoundMessage.vue";
 
 const router = useRouter();
 const revealed = ref(false);
