@@ -57,6 +57,14 @@ watch(sentinel, (node, previousNode) => {
 onBeforeUnmount(() => {
   observer.disconnect()
 })
+
+watch(loadingMore, (isLoadingMore) => {
+  if (!isLoadingMore && !error.value && sentinel.value) {
+    observer.unobserve(sentinel.value)
+    observer.observe(sentinel.value)
+  }
+})
+
 </script>
 
 <template>

@@ -1,6 +1,29 @@
-# Vue 3 + Vite
+<p align="center">
+  <img src="src/assets/pokedex66.png" alt="Pokedex66" />
+</p>
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+---
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
-![img.png](docs/references/img.png)
+<h3 align="center">Luis E Vélez</h3>
+
+<p align="center">
+  Software Developer
+</p>
+
+<p align="center">
+  <a href="mailto:luivelez.dev@gmail.com">
+    <img src="https://img.shields.io/badge/Email-luivelez.dev%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+  </a>
+  <a href="https://www.linkedin.com/in/luis-enrique-velez-santos/">
+    <img src="https://img.shields.io/badge/LinkedIn-Luis%20E%20Vélez-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
+  <a href="https://www.instagram.com/luis_velez.dev/">
+    <img src="https://img.shields.io/badge/Instagram-@luis__velez.dev-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" />
+  </a>
+</p>
+
+<p>
+LIVE PREVIEW: pokedex66.velantos.com
+</p>
+
+---
