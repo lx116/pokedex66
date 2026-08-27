@@ -1,27 +1,32 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { storeToRefs } from "pinia"
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline"
 
-import { usePokemonStore } from "../../store/usePokemonStore"
+const props = defineProps<{
+  initialQuery?: string
+}>()
 
-const pokemonName = ref("")
+const emit = defineEmits<{
+  search: [query: string]
+}>()
 
-const store = usePokemonStore()
-const { pokemon } = storeToRefs(store)
-const { findPokemon } = store
+const pokemonName = ref(props.initialQuery ?? "")
+
+watch(() => props.initialQuery, (value) => {
+  pokemonName.value = value ?? ""
+})
 
 function searchPokemon() {
   const name = pokemonName.value.trim()
 
   if (!name) return
 
-  findPokemon(name)
+  emit('search', name)
 }
 
 watch(pokemonName, (value) => {
   if (!value.trim()) {
-    pokemon.value = null
+    emit('search', '')
   }
 })
 </script>

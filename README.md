@@ -22,8 +22,13 @@
   </a>
 </p>
 
-<p>
-LIVE PREVIEW: pokedex66.velantos.com
+
+<h3 align="center">Live Preview</h3>
+
+<p align="center">
+  <a href="https://pokedex66.velantos.com">
+    <img src="https://img.shields.io/badge/OPEN%20LIVE%20PREVIEW-pokedex66.velantos.com-FF3B00?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Preview" />
+  </a>
 </p>
 
 ---

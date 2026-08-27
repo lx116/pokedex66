@@ -158,4 +158,103 @@ describe('usePokemonStore', () => {
       expect(error.value).toBe(null)
     })
   })
+
+  describe('syncFromQuery', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('sin query, delega en el filtrado por tipo de siempre', async () => {
+      mockedGet
+        .mockResolvedValueOnce({ data: { results: [{ name: 'bulbasaur' }] } })
+        .mockResolvedValueOnce({ data: rawBulbasaur })
+
+      const store = usePokemonStore()
+      const { pokemon, pokemonList } = storeToRefs(store)
+      const promise = store.syncFromQuery('', [])
+      await vi.runAllTimersAsync()
+      await promise
+
+      expect(pokemon.value).toBe(null)
+      expect(pokemonList.value).toEqual([mappedBulbasaur])
+    })
+
+    it('con query y sin tipos, trae el pokemon exacto', async () => {
+      mockedGet.mockResolvedValueOnce({ data: rawCharmander })
+
+      const store = usePokemonStore()
+      const { pokemon, notFound } = storeToRefs(store)
+      await store.syncFromQuery('charmander', [])
+
+      expect(pokemon.value).toEqual(mappedCharmander)
+      expect(notFound.value).toBe(false)
+    })
+
+    it('con query y un tipo que sí coincide, muestra el pokemon (semántica AND)', async () => {
+      mockedGet.mockResolvedValueOnce({ data: rawCharmander })
+
+      const store = usePokemonStore()
+      const { pokemon, notFound } = storeToRefs(store)
+      await store.syncFromQuery('charmander', ['fire'])
+
+      expect(pokemon.value).toEqual(mappedCharmander)
+      expect(notFound.value).toBe(false)
+    })
+
+    it('con query y un tipo que NO coincide, no muestra el pokemon en vez de ignorar el filtro', async () => {
+      mockedGet.mockResolvedValueOnce({ data: rawCharmander })
+
+      const store = usePokemonStore()
+      const { pokemon, notFound } = storeToRefs(store)
+      await store.syncFromQuery('charmander', ['water'])
+
+      expect(pokemon.value).toBe(null)
+      expect(notFound.value).toBe(true)
+    })
+
+    it('con un desajuste de tipo, guarda el nombre buscado y sus tipos reales para sugerir', async () => {
+      mockedGet.mockResolvedValueOnce({ data: rawCharmander })
+
+      const store = usePokemonStore()
+      const { notFoundMismatch } = storeToRefs(store)
+      await store.syncFromQuery('charmander', ['water'])
+
+      expect(notFoundMismatch.value).toEqual({ name: 'charmander', types: ['fire'] })
+    })
+
+    it('con un pokemon inexistente, marca notFound sin importar los tipos y sin guardar un desajuste', async () => {
+      mockedGet.mockRejectedValueOnce(
+        Object.assign(new Error('Request failed with status code 404'), {
+          isAxiosError: true,
+          response: { status: 404 },
+        }),
+      )
+
+      const store = usePokemonStore()
+      const { pokemon, notFound, notFoundMismatch } = storeToRefs(store)
+      await store.syncFromQuery('asdfasdf', ['fire'])
+
+      expect(pokemon.value).toBe(null)
+      expect(notFound.value).toBe(true)
+      expect(notFoundMismatch.value).toBe(null)
+    })
+
+    it('una nueva búsqueda exitosa limpia el desajuste anterior', async () => {
+      mockedGet.mockResolvedValueOnce({ data: rawCharmander })
+
+      const store = usePokemonStore()
+      const { notFoundMismatch } = storeToRefs(store)
+      await store.syncFromQuery('charmander', ['water'])
+      expect(notFoundMismatch.value).not.toBe(null)
+
+      mockedGet.mockResolvedValueOnce({ data: rawCharmander })
+      await store.syncFromQuery('charmander', ['fire'])
+
+      expect(notFoundMismatch.value).toBe(null)
+    })
+  })
 })
